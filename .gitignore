@@ -173,3 +173,8 @@ cython_debug/
 # PyPI configuration file
 .pypirc
 .DS_Store
+
+
+dataset
+.env
+models/food_classification_model/checkpoints

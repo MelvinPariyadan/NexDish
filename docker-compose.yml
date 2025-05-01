@@ -1,0 +1,36 @@
+services:
+  classification_model:
+    build:
+      context: ./models/food_classification_model
+    ports:
+      - "8002:8002"
+    container_name: classification_model
+
+  llm_model:
+    build:
+      context: ./models/food_llm_model
+    ports:
+      - "8001:8001"
+    container_name: llm_model
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+
+  webserver:
+    build:
+      context: ./webserver
+    ports:
+      - "8000:8000"
+
+    container_name: webserver
+    depends_on:
+      - classification_model
+      - llm_model
+
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "8501:8501"
+    container_name: frontend
+    depends_on:
+      - webserver
