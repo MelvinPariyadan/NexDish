@@ -25,10 +25,11 @@ pip install -r requirements.txt
 
 ## 🔐 3. Set Up DVC for Dataset & Model Syncing
 
-> ⚠️ The dataset and model files are stored in an AWS S3 bucket and tracked using DVC. Here you need 2 configuration files, which will be provided by Melvin. 
+> ⚠️ The dataset and model files are stored in an AWS S3 bucket and are managed using DVC.
+To access them, you’ll need two secret key files, which are available in the **Project Secrets** folder on OneDrive for this project.
 
-1. Add your provided **`.env`** file in the project root. 
-2. Add the provided **`.dvc/config`** file in the `.dvc/` folder. It contains the correct S3 bucket configurations.
+1. Add your provided **`.env`** file in the project root. So it will be in NexDish/.env
+2. Add the provided **`config`** file in the `.dvc/` folder. So it will be in NexDish/.dvc/config. It contains the correct S3 bucket configurations.
 3. Pull the dataset and model (this can take up to **30 minutes** depending on your network):
 
 ```bash
