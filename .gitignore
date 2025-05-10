@@ -178,3 +178,5 @@ cython_debug/
 dataset
 .env
 models/food_classification_model/checkpoints
+.vscode
+.dvc/config
