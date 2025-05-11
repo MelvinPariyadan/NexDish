@@ -84,3 +84,40 @@ python models/food_classification_model/src/train.py
 - `train.py` – Main training loop and saving model
 
 The trained model is saved at the path specified in `params.yaml`.
+
+
+## Working with DVC
+
+We use **DVC (Data Version Control)** to track and version the dataset and model weights. Anytime you update the dataset or model weights and we wanna track those with git, we use the following commands:
+
+### Step 1: Add Changes to DVC
+
+Use the `dvc add` command to track changes:
+
+```bash
+dvc add dataset  # Run this if you modified the dataset
+dvc add models/food_classification_model/checkpoints  # Run this if new model weights were added
+```
+
+This updates the corresponding `.dvc` files (`dataset.dvc`, `checkpoints.dvc`).
+
+### Step 2: Commit Changes to Git
+
+After updating the DVC files, commit them along with any other changes (e.g., updated `params.yaml`):
+
+```bash
+git add dataset.dvc models/food_classification_model/checkpoints.dvc params.yaml
+git commit -m "Updated dataset and model checkpoints"
+git push
+```
+
+### Step 3: Push to Remote Storage
+
+Finally, push the DVC-tracked data to the remote storage (e.g., S3 bucket):
+
+```bash
+dvc push
+```
+
+This ensures your data and model versions are stored and shared properly across collaborators or deployments.
+
