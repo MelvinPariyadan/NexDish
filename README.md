@@ -44,6 +44,8 @@ Make sure [Docker Desktop](https://www.docker.com/products/docker-desktop/) is i
 
 ```bash
 docker-compose up -d
+# If you make a change to code for example frontend and want to see it after running this command first run
+# docker-compose down --rmi all --volume, to remove existing container and then run docker-compose up -d again it will have your code changes 
 ```
 
 ---
@@ -56,3 +58,29 @@ Open your browser and go to:
 http://localhost:8501
 ```
 
+
+
+
+## 🧠 Training Instructions
+
+All code related to model training is located in:
+
+```
+models/food_classification_model/src/
+```
+
+To start training, run:
+
+```bash
+python models/food_classification_model/src/train.py
+```
+
+### 🔧 Code Structure
+
+- `params.yaml` – Centralized configuration for hyperparameters and paths  
+- `model.py` – ResNet-50 model architecture definition  
+- `transforms.py` – Image preprocessing and data augmentation  
+- `prepare.py` – Dataset loading and splitting into train/val/test  
+- `train.py` – Main training loop and saving model
+
+The trained model is saved at the path specified in `params.yaml`.
