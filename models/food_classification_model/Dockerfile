@@ -7,6 +7,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY model_server.py .
 COPY checkpoints/ checkpoints/
+COPY src/ models/food_classification_model/src
+
+ENV PYTHONPATH=/app/models/food_classification_model
 
 EXPOSE 8002
 

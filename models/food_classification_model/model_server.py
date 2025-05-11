@@ -6,39 +6,29 @@ from torchvision import transforms
 from torchvision.models import resnet50
 import io
 import json
+from src.transform import get_transforms
+from src.model import load_model_architecture
+from torchvision.models import ResNet50_Weights
+import yaml
+
 
 app = Flask(__name__)
 
+with open("models/food_classification_model/src/params.yaml") as f:
+    config = yaml.safe_load(f)
+
+HIDDEN_DIM = config["train"]["hidden_dim"]
+NUM_CLASSES = config["dataset"]["num_classes"]
 
 # Active Model
 checkpoint = torch.load('checkpoints/resnet50_full_dataset.pth', map_location=torch.device('cpu'))
 classes = checkpoint['classes']
 
-
-
-
-# Model Architecture
-model = resnet50(pretrained=False)  
-hidden_dim = 512
-in_features = model.fc.in_features
-model.fc = nn.Sequential(
-    nn.Linear(in_features, hidden_dim),
-    nn.ReLU(inplace=True),
-    nn.Dropout(p=0.5),
-    nn.Linear(hidden_dim, len(classes))
-)
-
+model = load_model_architecture(weights=None, device="cpu", hidden_dim=HIDDEN_DIM, num_classes=NUM_CLASSES)
 model.load_state_dict(checkpoint['model_state_dict'])
 model.eval()
 
-# image to tensor tranformation
-transformation_pipeline = transforms.Compose([
-    transforms.Resize(256),
-    transforms.CenterCrop(224),
-    transforms.ToTensor(),
-    transforms.Normalize(mean=[0.485, 0.456, 0.406],
-                         std=[0.229, 0.224, 0.225]),
-])
+train_tfms, val_tfms = get_transforms()
 
 
 @app.route('/predict', methods=['POST'])
@@ -46,7 +36,7 @@ def predict():
     try:
         image_bytes = request.files['file'].read()
         img = Image.open(io.BytesIO(image_bytes)).convert('RGB')
-        img = transformation_pipeline(img).unsqueeze(0)
+        img = val_tfms(img).unsqueeze(0)
 
         with torch.no_grad():
             outputs = model(img)
