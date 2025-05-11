@@ -61,7 +61,7 @@ http://localhost:8501
 
 
 
-## 🧠 Training Instructions
+# 🧠 Training Instructions
 
 All code related to model training is located in:
 
