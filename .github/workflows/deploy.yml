@@ -1,11 +1,12 @@
 name: CI/CD Pipeline
-#test
 
+# Test
 on:
   push:
     branches:
       - main
 
+jobs:
   deploy:
     name: Deploy to EC2
     if: github.ref == 'refs/heads/main'
