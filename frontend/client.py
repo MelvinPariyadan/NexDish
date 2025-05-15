@@ -11,7 +11,7 @@ WEB_SERVER_URL = "http://webserver:8000"
 st.set_page_config(page_title="NexDish 🍱", layout="centered")
 
 st.title("🥗 NexDish - Smart Food Classifier")
-st.markdown("Upload a food image to get insights about the dish, its origin, and nutritional values.")
+st.markdown("Upload a food image to get insights about the dish, its origins, and nutritional values.")
 
 uploaded_file = st.file_uploader("📤 Choose an image...", type=["jpg", "jpeg", "png"])
 
