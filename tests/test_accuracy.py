@@ -3,7 +3,7 @@ import numpy as np
 from dotenv import load_dotenv
 import os
 
-PATH = "models/food_classification_model/checkpoints/resnet50_full_dataset.pth"
+PATH = "models/food_classification_model/checkpoints/best_model.pth"
 
 def test_model_accuracy_threshold():
     load_dotenv()
