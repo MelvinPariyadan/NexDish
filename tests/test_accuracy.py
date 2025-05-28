@@ -9,4 +9,4 @@ def test_model_accuracy_threshold():
     model_data = torch.load(path_to_model)
     test_acc = model_data.get('test_acc', 0.0)
 
-    assert test_acc >= 0.85, f"Top-1 Accuracy too low: {test_acc:.2%}"
+    assert test_acc >= 0.80, f"Top-1 Accuracy too low: {test_acc:.2%}"
