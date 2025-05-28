@@ -85,6 +85,16 @@ python models/food_classification_model/src/train.py
 
 The trained model is saved at the path specified in `params.yaml`.
 
+### 📊 Accuracy Testing
+
+After training the model, we manually tested its accuracy using the .pth file saved in the checkpoints folder.
+
+To run the manual accuracy test:
+
+```bash
+python tests/test_model_accuracy.py
+```
+This script loads the trained model and checks if its accuracy meets the expected threshold (e.g., ≥ 85%).
 
 ## Working with DVC
 
