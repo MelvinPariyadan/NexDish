@@ -1,4 +1,4 @@
-name: CI - Test Model Accuracy
+name: Continuous Integration - Full Stack and Model Accuracy and Inference Testing
 
 on:
   push:
@@ -9,9 +9,14 @@ on:
       - main
 
 jobs:
-  test-model:
-    name: Model Accuracy Test
+  test-fullstack:
+    name: Full Stack + Model Accuracy Tests
     runs-on: ubuntu-latest
+
+    services:
+      docker:
+        image: docker:24.0.5
+        options: --privileged
 
     steps:
       - name: Checkout repository
@@ -20,13 +25,17 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.9' 
+          python-version: '3.9'
 
-      - name: Install CI requirements
+      - name: Install Docker Compose
         run: |
-          python -m pip install --upgrade pip
+          sudo apt-get update
+          sudo apt-get install docker-compose -y
+
+      - name: Set up CI dependencies
+        run: |
           pip install -r tests/requirements.txt
-          pip install dvc[s3]  # or dvc[gdrive], dvc[azure], etc., based on your remote
+          pip install dvc[s3]
 
       - name: Configure DVC remote
         env:
@@ -39,6 +48,18 @@ jobs:
           dvc remote modify myremote region us-east-1
           dvc pull models/food_classification_model/checkpoints.dvc
 
-      - name: Run Pytest
+      - name: Build and Start Services
+        run: |
+          docker-compose up -d --build
+
+      - name: Wait for services to be ready
+        run: |
+          for i in {1..30}; do
+            curl -s http://localhost:8000/upload && break || sleep 2
+          done
+
+      - name: Run API and Accuracy Tests
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
           pytest tests

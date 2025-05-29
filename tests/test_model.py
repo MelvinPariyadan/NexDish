@@ -33,7 +33,6 @@ def test_model_inference_time():
     hidden_dim = config["train"]["hidden_dim"]
     num_classes = config["dataset"]["num_classes"]
 
-    # Load checkpoint and model
     checkpoint = torch.load(PATH, map_location=torch.device('cpu'))
     classes = checkpoint["classes"]
 
@@ -41,14 +40,11 @@ def test_model_inference_time():
     model.load_state_dict(checkpoint['model_state_dict'])
     model.eval()
 
-    # Get validation transforms
     _, val_tfms = get_transforms()
 
-    # Load and transform image
     img = Image.open(INFERENCE_IMAGE_PATH).convert("RGB")
     input_tensor = val_tfms(img).unsqueeze(0)
 
-    # Inference timing
     with torch.no_grad():
         start = time.time()
         output = model(input_tensor)
@@ -56,3 +52,5 @@ def test_model_inference_time():
 
     inference_time = end - start
     assert inference_time <= 0.2, f"Inference too slow: {inference_time:.3f} seconds"
+
+
