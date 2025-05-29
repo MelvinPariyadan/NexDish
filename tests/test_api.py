@@ -5,6 +5,8 @@ LLM_URL = "http://localhost:8001"
 CLASSIFIER_URL = "http://localhost:8002"
 IMG_PATH = "tests/inference_img.jpg"
 
+
+# This includes test from classifier to llm to get the food info 
 def test_upload_endpoint_success():
     with open(IMG_PATH, "rb") as img:
         files = {"file": ("test.jpg", img, "image/jpeg")}
