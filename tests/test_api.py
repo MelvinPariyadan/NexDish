@@ -27,4 +27,6 @@ def test_llm_basic_response():
     response = requests.get(f"{LLM_URL}/info/pizza")
     assert response.status_code == 200
     data = response.json()
+    if "error" in data:
+        raise AssertionError(f"LLM service returned an error: {data['error']}")
     assert "description" in data
