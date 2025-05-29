@@ -1,9 +1,6 @@
 name: Continuous Integration Pipeline
 
 on:
-  push:
-    branches:
-      - dev
   pull_request:
     branches:
       - main
