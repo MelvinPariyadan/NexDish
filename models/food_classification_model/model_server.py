@@ -6,8 +6,8 @@ from torchvision import transforms
 from torchvision.models import resnet50
 import io
 import json
-from src.transform import get_transforms
-from src.model import load_model_architecture
+from offline_src.transform import get_transforms
+from offline_src.model import load_model_architecture
 from torchvision.models import ResNet50_Weights
 import yaml
 

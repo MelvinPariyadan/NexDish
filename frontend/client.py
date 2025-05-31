@@ -56,8 +56,12 @@ if uploaded_file:
                 st.markdown(f"**Common Allergens:** {food_info.get('common_allergens', 'N/A')}")
                 st.markdown(f"**Interesting Fact:** {food_info.get('interesting_facts', 'N/A')}")
 
-        else:
-            st.error(f"❌ Server error: {response.text}")
+        elif response.status_code == 400:
+            data = response.json()
+            if "warning" in data and "outlier_score" in data:
+                st.warning(f"⚠️ Outlier Warning - Please upload a valid food photo: {data['warning']} (score={data['outlier_score']:.2f})")
+            else:
+                st.error(f"❌ Bad request: {response.text}")
 
     except Exception as e:
         st.error(f"❌ Failed to connect to API: {str(e)}")
