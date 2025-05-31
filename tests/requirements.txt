@@ -1,0 +1,5 @@
+torch
+torchvision
+numpy
+pytest
+python-dotenv==1.1.0
