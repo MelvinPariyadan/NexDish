@@ -24,7 +24,7 @@ tstamp = current_time.strftime("%Y-%m-%d_%H:%M:%S")
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 # Local directories
-PROJECT_DIR = os.path.dirname(__file__) #make paths absolute
+PROJECT_DIR = os.path.dirname(__file__) 
 DATA_DIR = os.path.abspath(os.path.join(PROJECT_DIR, "..", "..", "..", "datasets/food-101"))
 CONFIG_PATH = os.path.join(PROJECT_DIR, 'params.yaml')
 MODEL_DIR = os.path.join(PROJECT_DIR, '../checkpoints')
@@ -35,10 +35,9 @@ RESULTS_PATH = os.path.join(MODEL_DIR, f'accuracy_checkpoint_{tstamp}.txt')
 with open(CONFIG_PATH) as f:
     config = yaml.safe_load(f)
 
-# print("Using config:", config)
 
 
-PIN_MEMORY = False # Improves GPU perf. by enabling faster CPU->GPU loads
+PIN_MEMORY = False 
 NUM_WORKERS = 0
 
 # check GPU availability

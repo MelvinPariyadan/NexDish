@@ -20,7 +20,7 @@ tstamp = current_time.strftime("%Y-%m-%d_%H:%M:%S")
 
 
 # Local directories
-PROJECT_DIR = os.path.dirname(__file__) #make paths absolute
+PROJECT_DIR = os.path.dirname(__file__) 
 DATA_DIR = os.path.abspath(os.path.join(PROJECT_DIR, "..", "..", "..", "datasets/food-101"))
 CONFIG_PATH = os.path.join(PROJECT_DIR, 'params.yaml')
 MODEL_DIR = os.path.join(PROJECT_DIR, '../checkpoints')
@@ -33,8 +33,8 @@ with open(CONFIG_PATH) as f:
 
 print("Using config:", config)
 
-
-PIN_MEMORY = True # Improves GPU perf. by enabling faster CPU->GPU loads
+# Improves GPU perf. by enabling faster CPU->GPU loads
+PIN_MEMORY = True 
 NUM_WORKERS = 4
 
 # check GPU availability
@@ -63,7 +63,7 @@ model = load_model_architecture(weights=ResNet50_Weights.IMAGENET1K_V1, device=d
 
 criterion = nn.CrossEntropyLoss()
 optimizer = optim.Adam(model.parameters(), lr=LR, weight_decay=WEIGHT_DECAY)
-scaler = torch.amp.GradScaler() #use amp for faster (mixed precision) training
+scaler = torch.amp.GradScaler() 
 
 train_accs, val_accs = [], []
 train_losses, val_losses = [], []

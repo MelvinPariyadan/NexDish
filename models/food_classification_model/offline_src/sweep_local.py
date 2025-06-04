@@ -20,7 +20,7 @@ tstamp = current_time.strftime("%Y-%m-%d_%H:%M:%S")
 
 
 # Local directories
-PROJECT_DIR = os.path.dirname(__file__) #make paths absolute
+PROJECT_DIR = os.path.dirname(__file__) 
 DATA_DIR = os.path.abspath(os.path.join(PROJECT_DIR, "..", "..", "..", "datasets/food-101"))
 CONFIG_PATH = os.path.join(PROJECT_DIR, 'params.yaml')
 MODEL_DIR = os.path.join(PROJECT_DIR, '../checkpoints')

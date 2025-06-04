@@ -11,7 +11,7 @@ from tqdm import tqdm
 
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
-PROJECT_DIR = os.path.dirname(__file__) #make paths absolute
+PROJECT_DIR = os.path.dirname(__file__)
 CONFIG_PATH = os.path.join(PROJECT_DIR, 'params.yaml')
 
 with open(CONFIG_PATH) as f:

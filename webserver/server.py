@@ -15,6 +15,7 @@ app = Flask(__name__)
 CLASSIFICATION_MODEL_SERVER_URL = 'http://classification_model:8002'
 LLM_MODEL_SERVER_URL = 'http://llm_model:8001'
 OUTLIER_SERVER_URL = 'http://outlier_model:8003'
+OUTLIER_THRESHOLD = 0.028  # Threshold for outlier detection
 
 def log_outlier_detection(file, score):
     log_dir = Path("outliers")
@@ -24,7 +25,6 @@ def log_outlier_detection(file, score):
     with open("log.txt", "a") as f:
         f.write(f"[{datetime.now()}] Outlier detected: {file.filename}, score={score}\n")
 
-    # Save image
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     safe_name = f"{timestamp}_{file.filename}"
     image_path = log_dir / safe_name
@@ -47,7 +47,7 @@ def fetch_food_info(food_label):
 
 def check_outlier(file):
     try:
-        file.seek(0)  # Reset read pointer before reuse
+        file.seek(0) 
         response = requests.post(
             f"{OUTLIER_SERVER_URL}/detect_outlier",
             files={'file': (file.filename, file.read(), file.content_type)}
@@ -66,18 +66,18 @@ def upload():
     # Call OD for prediction
     outlier_result = check_outlier(file)
     if 'error' in outlier_result:
-        # outlier_result['filename'] = file.filename
         return jsonify(outlier_result), 500
 
-    is_outlier = outlier_result.get("results", [{}])[0].get("is_outlier", None)
     score = outlier_result.get("results", [{}])[0].get("score", None)
+    is_outlier = False
 
-    if is_outlier is None:
-        return jsonify({'error': 'Invalid response from outlier detection model'}), 500
+    # Set a threshold to trigger outlier detection
+    if score > OUTLIER_THRESHOLD:
+        is_outlier = True
 
     if is_outlier:
         log_outlier_detection(file, score)
-        return jsonify({'warning': 'Outlier image detected', 'outlier_score': score}), 400
+        return jsonify({'warning': 'Outlier image detected', 'outlier_score': score, "result": outlier_result}), 400
 
     # If not an outlier, proceed with classification
     try:
