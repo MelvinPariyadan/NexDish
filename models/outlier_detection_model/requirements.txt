@@ -1,0 +1,8 @@
+Flask
+Pillow
+torch
+PyYAML
+numpy
+alibi-detect[tensorflow]
+tensorflow
+dill

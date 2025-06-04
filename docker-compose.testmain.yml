@@ -1,11 +1,4 @@
 services:
-  outlier_model:
-      build:
-        context: ./models/outlier_detection_model
-      ports:
-        - "8003:8003"
-      container_name: outlier_model
-
   classification_model:
     build:
       context: ./models/food_classification_model
@@ -27,12 +20,10 @@ services:
       context: ./webserver
     ports:
       - "8000:8000"
-
     container_name: webserver
     depends_on:
       - classification_model
       - llm_model
-      - outlier_model
 
   frontend:
     build:

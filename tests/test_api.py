@@ -10,7 +10,8 @@ IMG_PATH = "tests/inference_img.jpg"
 def test_upload_endpoint_success():
     with open(IMG_PATH, "rb") as img:
         files = {"file": ("test.jpg", img, "image/jpeg")}
-        response = requests.post(f"{BASE_URL}/upload", files=files)
+        data = {"no_outlier": "1"}  
+        response = requests.post(f"{BASE_URL}/upload", files=files, data=data)
 
     assert response.status_code == 200
     data = response.json()

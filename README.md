@@ -107,6 +107,7 @@ Use the `dvc add` command to track changes:
 ```bash
 dvc add dataset  # Run this if you modified the dataset
 dvc add models/food_classification_model/checkpoints  # Run this if new model weights were added
+dvc add models/outlier_detection_model/checkpoints # Outlier Detection models
 ```
 
 This updates the corresponding `.dvc` files (`dataset.dvc`, `checkpoints.dvc`).

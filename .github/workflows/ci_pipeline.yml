@@ -50,7 +50,7 @@ jobs:
 
       - name: Build and Start Services
         run: |
-          docker-compose up -d --build
+          docker-compose -f docker-compose.testmain.yml up --build -d
 
       - name: Wait for services to be ready
         run: |

@@ -6,15 +6,15 @@ from torchvision import transforms
 from torchvision.models import resnet50
 import io
 import json
-from src.transform import get_transforms
-from src.model import load_model_architecture
+from offline_src.transform import get_transforms
+from offline_src.model import load_model_architecture
 from torchvision.models import ResNet50_Weights
 import yaml
 
 
 app = Flask(__name__)
 
-with open("models/food_classification_model/src/params.yaml") as f:
+with open("models/food_classification_model/offline_src/params.yaml") as f:
     config = yaml.safe_load(f)
 
 HIDDEN_DIM = config["train"]["hidden_dim"]

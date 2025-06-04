@@ -13,36 +13,32 @@ st.markdown("Upload a food image to get insights about the dish, its origin, and
 
 uploaded_file = st.file_uploader("📤 Choose an image...", type=["jpg", "jpeg", "png"])
 
-# Clear output when a new file is uploaded
+# Clear output on new upload
 if uploaded_file:
     st.image(uploaded_file, caption="📸 Uploaded Image", width=300)
     
-    # Create placeholder for status
     status_placeholder = st.empty()
-    
-    # Show "classifying..." message first
     status_placeholder.info("🔍 Classifying image...")
     time.sleep(2)
     status_placeholder.info("🔄 Generating response...")
     
     try:
-        # Send image to backend (API call starts immediately)
+        # Send image to backend for processing
         response = requests.post(
             f"{WEB_SERVER_URL}/upload",
             files={"file": uploaded_file.getvalue()}
         )
-        
-        # Wait 3 seconds and change message (API call is already running)
-   
+       
         
         if response.status_code == 200:
             data = response.json()
             status_placeholder.empty()
             
-            # Create placeholder for prediction
             prediction_placeholder = st.empty()
             
-            # Typing animation for predicted class
+            # Create a typing animation along response with time.sleep
+
+
             predicted_class = data.get('predicted_class', 'Unknown').capitalize()
             for i in range(1, len(predicted_class) + 1):
                 prediction_placeholder.success(f"🍽️ **Predicted Dish:** `{predicted_class[:i]}`")
@@ -51,20 +47,16 @@ if uploaded_file:
             # Get food info data
             food_info = data.get("food_info", {})
             
-            # Add the description header FIRST
             st.markdown("### 📝 Description")
             
-            # Create placeholder for description and animate
             description_placeholder = st.empty()
             description = food_info.get("description", "N/A")
             for i in range(1, len(description) + 1):
                 description_placeholder.markdown(description[:i])
                 time.sleep(0.002)
             
-            # Nutritional Highlights with typing animation
             st.markdown("### 💪 Nutritional Highlights")
             
-            # Animate each nutrition field
             calories_placeholder = st.empty()
             calories_text = f"**Calories:** {food_info.get('calories', 'N/A')}"
             for i in range(1, len(calories_text) + 1):
@@ -95,7 +87,6 @@ if uploaded_file:
                 risks_placeholder.markdown(risks_text[:i])
                 time.sleep(0.002)
             
-            # Cultural Insights with typing animation
             st.markdown("### 🌍 Cultural Insights")
             culture_placeholder = st.empty()
             culture_text = food_info.get("cultural_insights", "N/A")
@@ -103,7 +94,6 @@ if uploaded_file:
                 culture_placeholder.markdown(culture_text[:i])
                 time.sleep(0.002)
             
-            # Food Profile with typing animation
             st.markdown("### 🍽️ Food Profile")
             col1, col2 = st.columns(2)
             
@@ -138,9 +128,16 @@ if uploaded_file:
                 for i in range(1, len(fact_text) + 1):
                     fact_placeholder.markdown(fact_text[:i])
                     time.sleep(0.002)
-                
+
+        # If image is an outlier, display warning
+        elif response.status_code == 400:
+            data = response.json()
+            if "warning" in data and "outlier_score" in data:
+                st.warning(f"⚠️ Outlier Warning - Please upload a valid food photo: {data['warning']} (score={data['outlier_score']:.2f})")
+            else:
+                st.error(f"❌ Bad request: {response.text}")
         else:
-            status_placeholder.error(f"❌ Server error: {response.text}")
-            
+                st.error(f"❌ Server Error: {response.text}")
+
     except Exception as e:
         status_placeholder.error(f"❌ Failed to connect to API: {str(e)}")
