@@ -63,21 +63,26 @@ def upload():
 
     file = request.files['file']
 
-    # Call OD for prediction
-    outlier_result = check_outlier(file)
-    if 'error' in outlier_result:
-        return jsonify(outlier_result), 500
+    # Check for the optional "no_outlier" parameter
+    # This is for testing purposes as currently the outlier detection is tested due to memory constraints in Github Actions
+    no_outlier = request.form.get('no_outlier', '').lower() in ['1', 'true', 'yes']
 
-    score = outlier_result.get("results", [{}])[0].get("score", None)
-    is_outlier = False
+    if not no_outlier:
+        # Call OD for prediction
+        outlier_result = check_outlier(file)
+        if 'error' in outlier_result:
+            return jsonify(outlier_result), 500
 
-    # Set a threshold to trigger outlier detection
-    if score > OUTLIER_THRESHOLD:
-        is_outlier = True
+        score = outlier_result.get("results", [{}])[0].get("score", None)
+        is_outlier = False
 
-    if is_outlier:
-        log_outlier_detection(file, score)
-        return jsonify({'warning': 'Outlier image detected', 'outlier_score': score, "result": outlier_result}), 400
+        # Set a threshold to trigger outlier detection
+        if score is not None and score > OUTLIER_THRESHOLD:
+            is_outlier = True
+
+        if is_outlier:
+            log_outlier_detection(file, score)
+            return jsonify({'warning': 'Outlier image detected', 'outlier_score': score, "result": outlier_result}), 400
 
     # If not an outlier, proceed with classification
     try:
@@ -91,10 +96,9 @@ def upload():
         predicted_class = output["predicted_class"]
         food_info = fetch_food_info(predicted_class)
 
-
-        return jsonify({'predicted_class': predicted_class, 'food_info':food_info})
+        return jsonify({'predicted_class': predicted_class, 'food_info': food_info})
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0",port=8000, debug=True)
+    app.run(host="0.0.0.0", port=8000, debug=True)
