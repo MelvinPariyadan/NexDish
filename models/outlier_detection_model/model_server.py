@@ -14,7 +14,7 @@ with open("models/outlier_detection_model/src/params.yaml") as f:
 
 MAX_BATCH = config["output"]["max_batch"]
 SAVE_DIR = config["output"]["model_checkpoint"]
-IMG_SIZE = config["dataset"]["img_size"]
+IMG_SIZE = 64 # encoder trained on 64x64x3 images
 
 #TODO - load model from DVC ?
 outlier_detector = load_detector(SAVE_DIR)

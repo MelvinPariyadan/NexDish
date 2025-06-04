@@ -14,7 +14,7 @@ app = Flask(__name__)
 #docker
 CLASSIFICATION_MODEL_SERVER_URL = 'http://classification_model:8002'
 LLM_MODEL_SERVER_URL = 'http://llm_model:8001'
-OUTLIER_SERVER_URL = 'http://outlier_detection_model:8003'
+OUTLIER_SERVER_URL = 'http://outlier_model:8003'
 
 def log_outlier_detection(file, score):
     log_dir = Path("outliers")
@@ -66,6 +66,7 @@ def upload():
     # Call OD for prediction
     outlier_result = check_outlier(file)
     if 'error' in outlier_result:
+        # outlier_result['filename'] = file.filename
         return jsonify(outlier_result), 500
 
     is_outlier = outlier_result.get("results", [{}])[0].get("is_outlier", None)

@@ -21,7 +21,6 @@ dataset:
 
 # Model outputs
 output:
-  model_checkpoint: "models/outlier_detection_model/checkpoints"
+  model_checkpoint: "checkpoints"
   max_batch: 16
   img_size: 224
-

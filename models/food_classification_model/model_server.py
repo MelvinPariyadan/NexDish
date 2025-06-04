@@ -14,7 +14,7 @@ import yaml
 
 app = Flask(__name__)
 
-with open("models/food_classification_model/src/params.yaml") as f:
+with open("models/food_classification_model/offline_src/params.yaml") as f:
     config = yaml.safe_load(f)
 
 HIDDEN_DIM = config["train"]["hidden_dim"]
