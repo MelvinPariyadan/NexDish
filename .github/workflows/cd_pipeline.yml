@@ -1,5 +1,4 @@
 name: Continuous Deployment Pipeline
-
 on:
   push:
     branches:
@@ -21,5 +20,6 @@ jobs:
           script: |
             cd /home/ubuntu/NexDish
             git pull origin main
+            dvc pull
             docker-compose down
             docker-compose up --build -d

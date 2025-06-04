@@ -47,6 +47,7 @@ jobs:
           dvc remote modify myremote secret_access_key $AWS_SECRET_ACCESS_KEY
           dvc remote modify myremote region us-east-1
           dvc pull models/food_classification_model/checkpoints.dvc
+          dvc pull models/outlier_detection_model/checkpoints.dvc
 
       - name: Build and Start Services
         run: |
